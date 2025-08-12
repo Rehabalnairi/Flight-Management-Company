@@ -70,8 +70,6 @@ namespace Flight_Management_Company
 
             base.OnModelCreating(modelBuilder);
         }
-
-
     }
 
 }

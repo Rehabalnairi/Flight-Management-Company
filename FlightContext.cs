@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Flight_Management_Company.Models;
 
 namespace Flight_Management_Company
 {
@@ -69,6 +70,15 @@ namespace Flight_Management_Company
                 .IsUnique();
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Ticket>()
+            .Property(t => t.Fare)
+            .HasColumnType("decimal(10,2)");
+
+            modelBuilder.Entity<Baggage>()
+                .Property(b => b.WeightKg)
+                .HasColumnType("decimal(6,2)");
+
         }
     }
 

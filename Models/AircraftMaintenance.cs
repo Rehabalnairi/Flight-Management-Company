@@ -17,5 +17,6 @@ namespace Flight_Management_Company.Models
         public string Notes { get; set; } // e.g., Completed, Pending
         public int AircraftId { get; set; }
         public Aircraft Aircraft { get; set; }
+        public ICollection<CrewMember> CrewMembers { get; set; } // Crew assigned to this maintenance task
     }
 }

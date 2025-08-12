@@ -21,7 +21,7 @@ namespace Flight_Management_Company.Repositories
         {
             return _flightContext.AircraftMaintenances
                 .Include(am => am.Aircraft)
-                .Include(am => am.CrewMember)
+                .Include(am => am.CrewMembers)
                 .ToList();
 
         }
@@ -30,7 +30,7 @@ namespace Flight_Management_Company.Repositories
         {
             return _flightContext.AircraftMaintenances
                 .Include(am => am.Aircraft)
-                .Include(am => am.CrewMember)
+                .Include(am => am.CrewMembers)
                 .FirstOrDefault(am => am.MaintenanceId == id);
         }
         // Add a new maintenance record

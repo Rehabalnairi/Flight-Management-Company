@@ -31,6 +31,8 @@ namespace Flight_Management_Company
         public string TailNumber { get; set; }
         public string Model { get; set; }
         public int Capacity { get; set; }
+        public ICollection<Flight> Flights { get; set; } // Flights using this aircraft
+        public ICollection<AircraftMaintenance> Maintenances { get; set; } // Crew assigned to this aircraft
 
     }
 

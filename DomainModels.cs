@@ -94,6 +94,7 @@ namespace Flight_Management_Company
     {
         [Key]
         public int PassengerId { get; set; }
+        [Required]
         public string FullName { get; set; }
         [Required]
         public string PassportNo { get; set; }
@@ -107,8 +108,14 @@ namespace Flight_Management_Company
         public int BookingId { get; set; }
         [Required]
         public string BookingRef { get; set; }
+        [Required]
         public DateTime BookingDate { get; set; }
+        [Required]
         public string status { get; set; } // e.g., Confirmed, Cancelled
+        public int PassengerId { get; set; }
+        public Passenger Passenger { get; set; }
+
+        public ICollection<Ticket> Tickets { get; set; }
 
     }
     public class Ticket

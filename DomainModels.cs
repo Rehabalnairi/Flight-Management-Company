@@ -123,9 +123,31 @@ namespace Flight_Management_Company
         [Key]
         public int TicketId { get; set; }
         public string SeatNumber { get; set; }
+        [Column(TypeName = "decimal(10,2)")]
         public decimal Fare { get; set; }
         public bool CheckedIn { get; set; }
+        public int BookingId { get; set; }
+        public booking Booking { get; set; }
+
+        public int FlightId { get; set; }
+        public Flight Flight { get; set; }
+
+        public ICollection<Baggage> Baggages { get; set; }
     }
+    public class FlightCrew
+    {
+        // Composite PK: FlightId + CrewId
+        public int FlightId { get; set; }
+        public Flight Flight { get; set; }
+
+        public int CrewId { get; set; }
+        public CrewMember CrewMember { get; set; }
+
+        public string RoleOnFlight { get; set; }
+    }
+}
+    }
+
     public class Baggage
     {
         [Key]

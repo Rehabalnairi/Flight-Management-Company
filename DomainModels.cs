@@ -145,15 +145,20 @@ namespace Flight_Management_Company
 
         public string RoleOnFlight { get; set; }
     }
-}
-    }
 
     public class Baggage
     {
         [Key]
         public int BaggageId { get; set; }
+
+        public int TicketId { get; set; }
+        public Ticket Ticket { get; set; }
+
+        [Column(TypeName = "decimal(6,2)")]
         public decimal WeightKg { get; set; }
-        public string TagNumber { get; set; } // e.g., Checked-in, In Transit, Delivered
+
+        public string TagNumber { get; set; }
+       
     }
 
     public class AircraftMaintenance

@@ -46,7 +46,8 @@ namespace Flight_Management_Company
         [Required]
         public string Role { get; set; } // e.g., Pilot, Flight Attendant
         public string LicenseNo { get; set; }
-         public ICollection<FlightCrew> flightCrews { get; set; } // Flights this crew member is assigned to
+        public ICollection<FlightCrew> FlightCrews { get; set; }
+      
     }
     public class Route
     {

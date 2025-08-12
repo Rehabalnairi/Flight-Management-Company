@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace Flight_Management_Company.Service
 {
-    class PassengerService
+     public class PassengerService
     {
+        private readonly FlightContext _repo;
+        public PassengerService(FlightContext flightContext)
+        {
+            flightContext = flightContext;
+        }
+
     }
 }

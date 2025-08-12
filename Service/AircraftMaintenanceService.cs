@@ -8,5 +8,12 @@ namespace Flight_Management_Company.Service
 {
     class AircraftMaintenanceService
     {
+        private readonly FlightContext _flightContext;
+
+            public AircraftMaintenanceService(FlightContext flightContext)
+        {
+            _flightContext = flightContext;
+        }
+
     }
 }

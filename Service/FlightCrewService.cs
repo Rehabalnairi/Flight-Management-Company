@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Flight_Management_Company.Service
 {
-    class FlightCrewService
+     public class FlightCrewService
     {
+        private readonly FlightContext _flightContext;
+        public FlightCrewService(FlightContext flightContext)
+        {
+            _flightContext = flightContext;
+        }
     }
 }

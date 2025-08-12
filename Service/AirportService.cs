@@ -8,9 +8,11 @@ namespace Flight_Management_Company.Service
 {
    public class AirportService
     {
-        private AirportService() {
-            
-        }
+        private readonly FlightContext _flightContext;
+        public  AirportService(FlightContext flightContext) {
+            _flightContext = flightContext;
+
+    }
 
     }
 }

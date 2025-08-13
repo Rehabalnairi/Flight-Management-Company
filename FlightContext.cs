@@ -13,6 +13,10 @@ namespace Flight_Management_Company
 {
     public class FlightContext: DbContext
     {
+        public FlightContext(DbContextOptions<FlightContext> options)
+          : base(options)
+        {
+        }
         public DbSet<Airpot> Airports { get; set; }
         public DbSet<Aircraft> Aircrafts { get; set; }
         public DbSet<CrewMember> CrewMembers { get; set; }
@@ -25,7 +29,7 @@ namespace Flight_Management_Company
         public DbSet<Baggage> Baggages { get; set; }
         public DbSet<AircraftMaintenance> AircraftMaintenances { get; set; }
 
-        public FlightContext(DbContextOptions<FlightContext> options) : base(options) { }
+       // public FlightContext(DbContextOptions<FlightContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

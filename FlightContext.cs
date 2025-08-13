@@ -13,9 +13,13 @@ namespace Flight_Management_Company
 {
     public class FlightContext: DbContext
     {
-        public FlightContext(DbContextOptions<FlightContext> options)
-          : base(options)
+        public FlightContext(DbContextOptions<FlightContext> options) : base(options)
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server=DESKTOP-IV1AER0;Database=Airport;Trusted_Connection=True;TrustServerCertificate=True");
         }
         public DbSet<Airpot> Airports { get; set; }
         public DbSet<Aircraft> Aircrafts { get; set; }

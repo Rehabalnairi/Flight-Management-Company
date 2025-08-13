@@ -34,7 +34,7 @@ namespace Flight_Management_Company
         public DbSet<AircraftMaintenance> AircraftMaintenances { get; set; }
 
        // public FlightContext(DbContextOptions<FlightContext> options) : base(options) { }
-
+       //Fluent API
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Composite PK for FlightCrew

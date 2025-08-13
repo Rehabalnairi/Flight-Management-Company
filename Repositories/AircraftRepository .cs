@@ -15,11 +15,12 @@ namespace Flight_Management_Company.Repositories
         {
             _flightContext = flightContext;
         }
-         public IEnumerable<Aircraft> GetAircraft()
+         public IEnumerable<Aircraft> GetAllAircrafts()
         {
             return _flightContext.Aircrafts
             .Include(a => a.Flights)
-            .Include(a => a.Maintenances);
+            .Include(a => a.Maintenances)
+            .ToList();
         }
 
         public Aircraft GetAircraftById(int id)

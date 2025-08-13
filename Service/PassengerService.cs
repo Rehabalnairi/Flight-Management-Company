@@ -1,4 +1,5 @@
 ﻿using Flight_Management_Company.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,5 +80,26 @@ namespace Flight_Management_Company.Service
             _flightContext.SaveChanges();
 
         }
+
+        public IEnumerable<object> GetTopRoutesByRevenue(DateTime startDate, DateTime endDate)
+        {
+            return _flightContext.Flights
+                .Where(f => f.DepartureUtc >= startDate && f.DepartureUtc <= endDate)
+                .Include(f => f.Route)
+                .Include(f => f.Tickets)
+                .GroupBy(f => new { f.Route.OriginAirportId, f.Route.DestinationAirport })
+                .Select(g => new
+                {
+                    Route = g.Key.OriginAirportId + " → " + g.Key.OriginAirportId,
+                    TotalRevenue = g.Sum(f => f.Tickets.Sum(t => t.Fare)),
+                    SeatsSold = g.Sum(f => f.Tickets.Count),
+                    AverageFare = g.Average(f => f.Tickets.Average(t => t.Fare))
+                })
+                .OrderByDescending(r => r.TotalRevenue)
+                .ToList();
+        }
+
+
+
     }
 }

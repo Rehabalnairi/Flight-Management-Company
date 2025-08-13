@@ -1,4 +1,5 @@
 ﻿using Flight_Management_Company.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,5 +59,49 @@ namespace Flight_Management_Company.Service
             _flightContext.SaveChanges();
 
         }
+
+     public List<FlightManifestDto> GetDailyFlightManifest(DateTime dateUtc)
+        {
+            var flights = _flightContext.Flights
+                .Include(f =>f.Route)
+                .ThenInclude(r => r.OriginAirport)
+            .Include(f => f.Route)
+                .ThenInclude(r => r.DestinationAirport)
+            .Include(f => f.Aircraft)
+            .Include(f => f.Tickets)
+                .ThenInclude(t => t.Baggages)
+            .Include(f => f.FlightCrews)
+                .ThenInclude(fc => fc.CrewMember)
+            .Where(f => f.DepartureUtc.Date == dateUtc.Date)
+            .ToList();
+
+            var manfast = flights.Select(f => new FlightManifestDto
+            {
+                FlightNumber = f.FlightNumber,
+                DepartureUtc = f.DepartureUtc,
+                ArrivalUtc = f.ArrivalUtc,
+                OriginIATA = f.Route.OriginAirport.IATA,
+                DestIATA = f.Route.DestinationAirport.IATA,
+                AircraftTail = f.Aircraft.TailNumber,
+                PassengerCount = f.Tickets.Count,
+                TotalBaggageWeight = f.Tickets
+                .SelectMany(t => t.Baggages)
+                .Sum(b => b.WeightKg),
+                Crew = f.FlightCrews
+                .Select(fc => new CrewDto
+                {
+                    Name = fc.CrewMember.FullName,
+                    Role = fc.CrewMember.Role
+                })
+
+                .ToList()
+            }).ToList();
+
+            return manfast;
+        }
+  
+
+
+        }
     }
-}
+

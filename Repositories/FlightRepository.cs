@@ -9,12 +9,12 @@ namespace Flight_Management_Company.Repositories
     {
         private readonly FlightContext _flightContext;
 
-        public FlightRepository(FlightContext context)
+        public FlightRepository(FlightContext flightContext)
         {
             _flightContext = _flightContext;
         }
 
-        public IEnumerable<Flight> GetAll()
+        public IEnumerable<Flight> GetAllFlights()
         {
             return _flightContext.Flights
                 .Include(f => f.Route)

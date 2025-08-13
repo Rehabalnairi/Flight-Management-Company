@@ -11,19 +11,20 @@ namespace Flight_Management_Company
         public string Name { get; set; }
         public string Role { get; set; }
     }
-
     public class FlightManifestDto
     {
         public string FlightNumber { get; set; }
-        public string Origin { get; set; }
-        public string Destination { get; set; }
-        public DateTime DepUtc { get; set; }
-        public DateTime ArrUtc { get; set; }
+        public DateTime DepartureUtc { get; set; }
+        public DateTime ArrivalUtc { get; set; }
+        public string OriginIATA { get; set; }
+        public string DestIATA { get; set; }
         public string AircraftTail { get; set; }
         public int PassengerCount { get; set; }
-        public decimal TotalBaggageKg { get; set; }
         public List<CrewDto> Crew { get; set; }
+        public decimal TotalBaggageWeight { get; set; }
     }
+
+  
     public class RouteRevenueDto
     {
         public int RouteId { get; set; }
@@ -42,6 +43,23 @@ namespace Flight_Management_Company
         public DateTime FlightADep { get; set; }
         public DateTime FlightBDep { get; set; }
     }
- 
+    public class ItinSegmentDto
+    {
+        public int FlightId { get; set; }
+        public string FlightNumber { get; set; }
+        public string Origin { get; set; }
+        public string Destination { get; set; }
+        public DateTime DepUtc { get; set; }
+        public DateTime ArrUtc { get; set; }
+    }
+
+    public class PassengerItineraryDto
+    {
+        public int PassengerId { get; set; }
+        public string PassengerName { get; set; }
+        public List<ItinSegmentDto> Segments { get; set; }
+    }
+
+
 
 }

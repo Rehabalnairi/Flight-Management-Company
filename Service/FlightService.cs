@@ -99,9 +99,50 @@ namespace Flight_Management_Company.Service
 
             return manfast;
         }
-  
+
+        //public IEnumerable<object> GetOnTimePerformance(DateTime startDate, DateTime endDate, int thresholdMinutes, string groupBy = "Airline")
+        //{
+        //    var query = _flightContext.Flights
+        //        .Where(f => f.DepartureUtc >= startDate && f.DepartureUtc <= endDate)
+        //        .Select(f => new
+        //        {
+        //            f,
+        //            IsOnTime = Math.Abs(EF.Functions.DateDiffMinute(f.Aircraft, f.ArrivalUtc)) <= thresholdMinutes
+        //        });
+
+        //    if (groupBy == "Airline")
+        //    {
+        //        return query
+        //            .GroupBy(x => x.f.Airline.Name)
+        //            .Select(g => new
+        //            {
+        //                Airline = g.Key,
+        //                TotalFlights = g.Count(),
+        //                OnTimeFlights = g.Count(x => x.IsOnTime),
+        //                OnTimePercentage = (double)g.Count(x => x.IsOnTime) / g.Count() * 100
+        //            })
+        //            .OrderByDescending(r => r.OnTimePercentage)
+        //            .ToList();
+        //    }
+        //    else // Group by Route
+        //    {
+        //        return query
+        //            .GroupBy(x => new { x.f.Route.OriginIATA, x.f.Route.DestIATA })
+        //            .Select(g => new
+        //            {
+        //                Route = g.Key.OriginIATA + " → " + g.Key.DestIATA,
+        //                TotalFlights = g.Count(),
+        //                OnTimeFlights = g.Count(x => x.IsOnTime),
+        //                OnTimePercentage = (double)g.Count(x => x.IsOnTime) / g.Count() * 100
+        //            })
+        //            .OrderByDescending(r => r.OnTimePercentage)
+        //            .ToList();
+        //    }
+        //}
 
 
-        }
+
+
     }
+}
 

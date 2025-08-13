@@ -80,7 +80,7 @@ namespace Flight_Management_Company.Service
             _flightContext.SaveChanges();
 
         }
-
+        //Top Routes by Revenue
         public IEnumerable<object> GetTopRoutesByRevenue(DateTime startDate, DateTime endDate)
         {
             return _flightContext.Flights

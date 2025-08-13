@@ -16,29 +16,32 @@ namespace Flight_Management_Company.Service
         {
             _flightContext = flightContext;
         }
-        public void SeedAircrafts()
+
+        public void SeedAircraftMaintenances()
         {
-            if (_flightContext.Aircrafts.Any()) return;
+            if (_flightContext.AircraftMaintenances.Any()) return;
 
-            var aircrafts = new List<Aircraft>
+            var random = new Random();
+            var aircrafts = _flightContext.Aircrafts.ToList();
+            var maintenances = new List<AircraftMaintenance>();
+
+            for (int i = 1; i <= 15; i++)
             {
-                new Aircraft { TailNumber = "N12345", Model = "Boeing 737", Capacity = 160 },
-                new Aircraft { TailNumber = "N54321", Model = "Airbus A320", Capacity = 180 },
-                new Aircraft { TailNumber = "N98765", Model = "Boeing 777", Capacity = 300 },
-                new Aircraft { TailNumber = "N56789", Model = "Embraer E190", Capacity = 100 },
-                new Aircraft { TailNumber = "N19283", Model = "Airbus A380", Capacity = 280 },
-                new Aircraft { TailNumber = "N56473", Model = "Boeing 747", Capacity = 250 },
-                new Aircraft { TailNumber = "N84736", Model = "Bombardier CRJ900", Capacity = 120 },
-                new Aircraft { TailNumber = "N74829", Model = "Airbus A350", Capacity = 280 },
-                new Aircraft { TailNumber = "N29384", Model = "Boeing 787", Capacity = 260 },
-                new Aircraft { TailNumber = "N67583", Model = "McDonnell Douglas MD-80", Capacity = 150 }
-            };
+                var aircraft = aircrafts[random.Next(aircrafts.Count)];
 
-            _flightContext.Aircrafts.AddRange(aircrafts);
+                maintenances.Add(new AircraftMaintenance
+                {
+                    AircraftId = aircraft.AircraftId,
+                    MaintenanceDate = DateTime.UtcNow.AddDays(-random.Next(60)), // lor last 60 days ago
+                    Type = i % 2 == 0 ? "Routine Check" : "Repair",
+                    Notes = i % 2 == 0 ? "Completed" : "Pending"
+                });
+            }
+
+            _flightContext.AircraftMaintenances.AddRange(maintenances);
             _flightContext.SaveChanges();
-
-
         }
+
     }
 }
 

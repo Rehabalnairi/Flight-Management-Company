@@ -83,6 +83,18 @@ namespace Flight_Management_Company
                 .Property(b => b.WeightKg)
                 .HasColumnType("decimal(6,2)");
 
+            modelBuilder.Entity<Route>()
+          .HasOne(r => r.OriginAirport)
+          .WithMany(a => a.OriginRoutes)
+          .HasForeignKey(r => r.OriginAirportId)
+          .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Route>()
+          .HasOne(r => r.DestinationAirport)
+          .WithMany(a => a.DestinationRoutes)
+          .HasForeignKey(r => r.DestinationAirportId)
+          .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 

@@ -27,12 +27,14 @@ namespace Flight_Management_Company
   
     public class RouteRevenueDto
     {
+        public string Route { get; set; }
         public int RouteId { get; set; }
         public string Origin { get; set; }
         public string Destination { get; set; }
         public decimal Revenue { get; set; }
         public int SeatsSold { get; set; }
-        public decimal AvgFare { get; set; }
+        public decimal AverageFare { get; set; }
+        public decimal TotalRevenue { get; set; }
     }
     public class CrewConflictDto
     {
@@ -60,6 +62,5 @@ namespace Flight_Management_Company
         public List<ItinSegmentDto> Segments { get; set; }
     }
 
-
-
+  
 }

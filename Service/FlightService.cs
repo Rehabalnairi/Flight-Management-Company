@@ -59,8 +59,8 @@ namespace Flight_Management_Company.Service
             _flightContext.SaveChanges();
 
         }
-
-     public List<FlightManifestDto> GetDailyFlightManifest(DateTime dateUtc)
+        // Daily Flight Manifest
+        public List<FlightManifestDto> GetDailyFlightManifest(DateTime dateUtc)
         {
             var flights = _flightContext.Flights
                 .Include(f =>f.Route)
@@ -99,6 +99,30 @@ namespace Flight_Management_Company.Service
 
             return manfast;
         }
+        //Top Routes by Revenue
+        public IEnumerable<RouteRevenueDto> GetTopRoutesByRevenue(DateTime startDate, DateTime endDate)
+        {
+            var query = _flightContext.Tickets
+                .Where(t => t.Flight.DepartureUtc >= startDate && t.Flight.DepartureUtc <= endDate)
+                .GroupBy(t => new
+                {
+                    Origin = t.Flight.Route.OriginAirport.IATA,
+                    Destination = t.Flight.Route.DestinationAirport.IATA
+                })
+                .Select(g => new RouteRevenueDto
+                {
+                    Route = g.Key.Origin + " → " + g.Key.Destination,
+                    TotalRevenue = g.Sum(x => x.Fare),
+                    SeatsSold = g.Count(),
+                    AverageFare = g.Average(x => x.Fare)
+                })
+                .OrderByDescending(r => r.TotalRevenue)
+                .ToList();
+
+            return query;
+        }
+
+
 
         //public IEnumerable<object> GetOnTimePerformance(DateTime startDate, DateTime endDate, int thresholdMinutes, string groupBy = "Airline")
         //{

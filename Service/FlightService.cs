@@ -121,51 +121,53 @@ namespace Flight_Management_Company.Service
 
             return query;
         }
+        //On-Time Performance
 
+        public List<OnTimePerformanceDto> GetOnTimePerformance(DateTime startDate, DateTime endDate, int toleranceMinutes = 15)
+        {
+            var query = _flightContext.Flights
+                .Include(f => f.Route)
+                .Where(f => f.DepartureUtc >= startDate && f.DepartureUtc <= endDate);
 
+            var result = query
+                .GroupBy(f => f.Route)
+                .Select(g => new OnTimePerformanceDto
+                {
+                    RouteId = g.Key.RouteId,
+                    RouteName = g.Key.OriginAirport.IATA + " - " + g.Key.DestinationAirport.IATA,
+                    TotalFlights = g.Count(),
+                    OnTimeFlights = g.Count(f => Math.Abs(EF.Functions.DateDiffMinute(f.DepartureUtc, f.ArrivalUtc)) <= toleranceMinutes),
+                    OnTimePercentage = g.Count(f => Math.Abs(EF.Functions.DateDiffMinute(f.DepartureUtc, f.ArrivalUtc)) <= toleranceMinutes) * 100m / g.Count()
+                })
+                .ToList();
 
-        //public IEnumerable<object> GetOnTimePerformance(DateTime startDate, DateTime endDate, int thresholdMinutes, string groupBy = "Airline")
-        //{
-        //    var query = _flightContext.Flights
-        //        .Where(f => f.DepartureUtc >= startDate && f.DepartureUtc <= endDate)
-        //        .Select(f => new
-        //        {
-        //            f,
-        //            IsOnTime = Math.Abs(EF.Functions.DateDiffMinute(f.Aircraft, f.ArrivalUtc)) <= thresholdMinutes
-        //        });
+            return result;
+        }
+        //Seat Occupancy Heatmap
+        public List<FlightOccupancyDto> GetSeatOccupancyHeatmap(int topN = 10, decimal thresholdPercent = 80)
+        {
+            var query = _flightContext.Flights
+                .Include(f => f.Aircraft)
+                .Include(f => f.Route)
+                .Include(f => f.Tickets);
 
-        //    if (groupBy == "Airline")
-        //    {
-        //        return query
-        //            .GroupBy(x => x.f.Airline.Name)
-        //            .Select(g => new
-        //            {
-        //                Airline = g.Key,
-        //                TotalFlights = g.Count(),
-        //                OnTimeFlights = g.Count(x => x.IsOnTime),
-        //                OnTimePercentage = (double)g.Count(x => x.IsOnTime) / g.Count() * 100
-        //            })
-        //            .OrderByDescending(r => r.OnTimePercentage)
-        //            .ToList();
-        //    }
-        //    else // Group by Route
-        //    {
-        //        return query
-        //            .GroupBy(x => new { x.f.Route.OriginIATA, x.f.Route.DestIATA })
-        //            .Select(g => new
-        //            {
-        //                Route = g.Key.OriginIATA + " → " + g.Key.DestIATA,
-        //                TotalFlights = g.Count(),
-        //                OnTimeFlights = g.Count(x => x.IsOnTime),
-        //                OnTimePercentage = (double)g.Count(x => x.IsOnTime) / g.Count() * 100
-        //            })
-        //            .OrderByDescending(r => r.OnTimePercentage)
-        //            .ToList();
-        //    }
-        //}
+            var occupancyList = query
+                .Select(f => new FlightOccupancyDto
+                {
+                    FlightId = f.FlightId,
+                    FlightNumber = f.FlightNumber,
+                    RouteName = f.Route.OriginAirport.IATA + " - " + f.Route.DestinationAirport.IATA,
+                    SeatsSold = f.Tickets.Count,
+                    AircraftCapacity = f.Aircraft.Capacity,
+                    OccupancyRate = f.Aircraft.Capacity == 0 ? 0 : ((decimal)f.Tickets.Count / f.Aircraft.Capacity) * 100
+                })
+                .Where(f => f.OccupancyRate >= thresholdPercent)
+                .OrderByDescending(f => f.OccupancyRate)
+                .Take(topN)
+                .ToList();
 
-
-
+            return occupancyList;
+        }
 
     }
 }

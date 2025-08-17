@@ -26,6 +26,9 @@ namespace Flight_Management_Company.Models
 
         public int AircraftId { get; set; }
         public Aircraft Aircraft { get; set; }
+        public DateTime ScheduledDepartureUtc { get; set; }
+        public DateTime ScheduledArrivalUtc { get; set; }
+
 
         public ICollection<Ticket> Tickets { get; set; }
         public ICollection<FlightCrew> FlightCrews { get; set; }

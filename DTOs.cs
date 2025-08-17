@@ -61,6 +61,24 @@ namespace Flight_Management_Company
         public string PassengerName { get; set; }
         public List<ItinSegmentDto> Segments { get; set; }
     }
+    //On-Time Performance
+    public class OnTimePerformanceDto
+    {
+        public int RouteId { get; set; }
+        public string RouteName { get; set; } 
+        public int TotalFlights { get; set; }
+        public int OnTimeFlights { get; set; }
+        public decimal OnTimePercentage { get; set; }
+    }
+    // Seat Occupancy Heatmap
+    public class FlightOccupancyDto
+    {
+        public int FlightId { get; set; }
+        public string FlightNumber { get; set; }
+        public string RouteName { get; set; } // "OriginIATA - DestIATA"
+        public int SeatsSold { get; set; }
+        public int AircraftCapacity { get; set; }
+        public decimal OccupancyRate { get; set; } // 0-100%
+    }
 
-  
 }

@@ -168,6 +168,34 @@ namespace Flight_Management_Company.Service
 
             return occupancyList;
         }
+        // Find Available Seats for a Flight
+
+        public List<int> GetAvailableSeats(int flightId)
+        {
+        
+            var flight = _flightContext.Flights
+                .Include(f => f.Aircraft)
+                .Include(f => f.Tickets)
+                .FirstOrDefault(f => f.FlightId == flightId);
+
+            if (flight == null || flight.Aircraft == null)
+                return new List<int>();
+
+            int capacity = flight.Aircraft.Capacity;
+
+           
+            var allSeats = Enumerable.Range(1, capacity);
+
+          
+            var bookedSeats = flight.Tickets
+                .Where(t => !string.IsNullOrEmpty(t.SeatNumber))
+                .Select(t => int.Parse(t.SeatNumber));
+
+            var availableSeats = allSeats.Except(bookedSeats).ToList();
+
+            return availableSeats;
+        }
+        //
 
     }
 }

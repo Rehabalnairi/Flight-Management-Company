@@ -40,10 +40,12 @@ namespace Flight_Management_Company
     {
         public int CrewId { get; set; }
         public string CrewName { get; set; }
-        public int FlightAId { get; set; }
-        public int FlightBId { get; set; }
-        public DateTime FlightADep { get; set; }
-        public DateTime FlightBDep { get; set; }
+        public string FlightANumber { get; set; }
+        public DateTime FlightADeparture { get; set; }
+        public DateTime FlightAArrival { get; set; }
+        public string FlightBNumber { get; set; }
+        public DateTime FlightBDeparture { get; set; }
+        public DateTime FlightBArrival { get; set; }
     }
     public class ItinSegmentDto
     {
@@ -80,5 +82,7 @@ namespace Flight_Management_Company
         public int AircraftCapacity { get; set; }
         public decimal OccupancyRate { get; set; } // 0-100%
     }
+
+   
 
 }

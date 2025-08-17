@@ -195,7 +195,59 @@ namespace Flight_Management_Company.Service
 
             return availableSeats;
         }
-        //
+        //Crew Scheduling Conflicts 
+        public List<CrewConflictDto> GetCrewSchedulingConflicts()
+        {
+            var conflicts = new List<CrewConflictDto>();
+
+         
+            var flights = _flightContext.Flights
+                .Include(f => f.FlightCrews)
+                    .ThenInclude(fc => fc.CrewMember)  
+                .ToList();
+
+         
+            var crewFlights = flights
+                .SelectMany(f => f.FlightCrews.Select(fc => new
+                {
+                    Crew = fc.CrewMember,
+                    Flight = f
+                }))
+                .GroupBy(x => x.Crew.CrewId);
+
+            foreach (var group in crewFlights)
+            {
+                var crew = group.First().Crew;
+                var crewFlightsList = group.Select(x => x.Flight).OrderBy(f => f.DepartureUtc).ToList();
+
+                for (int i = 0; i < crewFlightsList.Count; i++)
+                {
+                    for (int j = i + 1; j < crewFlightsList.Count; j++)
+                    {
+                        var f1 = crewFlightsList[i];
+                        var f2 = crewFlightsList[j];
+
+                       
+                        if (f1.DepartureUtc < f2.ArrivalUtc && f2.DepartureUtc < f1.ArrivalUtc)
+                        {
+                            conflicts.Add(new CrewConflictDto
+                            {
+                                CrewId = crew.CrewId,
+                                CrewName = crew.FullName,
+                                FlightANumber = f1.FlightNumber,
+                                FlightADeparture = f1.DepartureUtc,
+                                FlightAArrival = f1.ArrivalUtc,
+                                FlightBNumber = f2.FlightNumber,
+                                FlightBDeparture = f2.DepartureUtc,
+                                FlightBArrival = f2.ArrivalUtc
+                            });
+                        }
+                    }
+                }
+            }
+
+            return conflicts;
+        }
 
     }
 }

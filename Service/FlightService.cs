@@ -248,6 +248,84 @@ namespace Flight_Management_Company.Service
 
             return conflicts;
         }
+        // Passengers with Connections
+
+        //public List<PassengerItineraryDto> GetPassengersWithConnections(int maxConnectionHours = 6)
+        //{
+        //    var result = new List<PassengerItineraryDto>();
+
+        //    var bookings = _flightContext.Bookings
+        //        .Include(b => b.Passenger)
+        //        .Include(b => b.Tickets)
+        //            .ThenInclude(t => t.Flight)
+        //                .ThenInclude(f => f.Route)
+        //        .ToList();
+
+        //    foreach (var booking in bookings)
+        //    {
+        //        var passenger = booking.Passenger;
+
+               
+        //        var flights = booking.Tickets
+        //            .Select(t => t.Flight)
+        //            .OrderBy(f => f.DepartureUtc)
+        //            .ToList();
+
+        //        if (flights.Count < 2) continue;
+
+        //        var segments = new List<ItinSegmentDto>();
+        //        bool hasConnection = false;
+
+        //        for (int i = 0; i < flights.Count - 1; i++)
+        //        {
+        //            var current = flights[i];
+        //            var next = flights[i + 1];
+
+        //            var gap = next.DepartureUtc - current.ArrivalUtc;
+
+        //            if (gap.TotalHours > 0 && gap.TotalHours <= maxConnectionHours)
+        //            {
+        //                hasConnection = true;
+        //            }
+
+
+        //            segments.Add(new ItinSegmentDto
+        //            {
+        //                FlightId = current.FlightId,
+        //                Origin = current.Route.OriginAirport.Code,
+        //                Destination = current.Route.DestinationAirport.Code,
+        //                DepartureUtc = current.DepartureUtc,
+        //                ArrivalUtc = current.ArrivalUtc
+        //            });
+        //            if (i == flights.Count - 2)
+        //            {
+        //                segments.Add(new ItinSegmentDto
+        //                {
+        //                    FlightId = next.FlightId,
+        //                    Origin = next.Route.OriginAirport.Code,
+        //                    Destination = next.Route.DestinationAirport.Code,
+        //                    Departure = next.DepartureUtc,
+        //                    Arrival = next.ArrivalUtc
+        //                });
+        //            }
+        //        }
+
+        //        if (hasConnection)
+        //        {
+        //            result.Add(new PassengerItineraryDto
+        //            {
+        //                PassengerId = passenger.PassengerId,
+        //                PassengerName = passenger.FullName,
+        //                BookingId = booking.BookingId,
+        //                Segments = segments
+        //            });
+        //        }
+        //    }
+
+        //    return result;
+        //}
+
+
 
     }
 }

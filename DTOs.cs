@@ -24,7 +24,7 @@ namespace Flight_Management_Company
         public decimal TotalBaggageWeight { get; set; }
     }
 
-  
+
     public class RouteRevenueDto
     {
         public string Route { get; set; }
@@ -61,13 +61,14 @@ namespace Flight_Management_Company
     {
         public int PassengerId { get; set; }
         public string PassengerName { get; set; }
+        public int BookingId { get; set; }
         public List<ItinSegmentDto> Segments { get; set; }
     }
     //On-Time Performance
     public class OnTimePerformanceDto
     {
         public int RouteId { get; set; }
-        public string RouteName { get; set; } 
+        public string RouteName { get; set; }
         public int TotalFlights { get; set; }
         public int OnTimeFlights { get; set; }
         public decimal OnTimePercentage { get; set; }
@@ -83,6 +84,14 @@ namespace Flight_Management_Company
         public decimal OccupancyRate { get; set; } // 0-100%
     }
 
-   
 
+    public class FlightSegmentDto
+    {
+        public string FlightNumber { get; set; }
+        public DateTime DepartureUtc { get; set; }
+        public DateTime ArrivalUtc { get; set; }
+        public string Route { get; set; }
+    }
+
+  
 }

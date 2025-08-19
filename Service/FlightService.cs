@@ -469,6 +469,38 @@ namespace Flight_Management_Company.Service
 
             return result;
         }
+        // Forecasting (simple) 
+        public List<BookingForecastDto> ForecastNextWeekBookings(List<booking> bookings)
+        {
+           
+            var dailyCounts = bookings
+                .GroupBy(b => b.BookingDate.Date)
+                .Select(g => new
+                {
+                    Date = g.Key,
+                    Count = g.Count()
+                })
+                .OrderBy(x => x.Date)
+                .ToList();
+
+          
+            double avgDailyBookings = dailyCounts.Any()
+                ? dailyCounts.Average(x => x.Count)
+                : 0;
+
+    
+            var forecast = new List<BookingForecastDto>();
+            for (int i = 1; i <= 7; i++)
+            {
+                forecast.Add(new BookingForecastDto
+                {
+                    Date = DateTime.Today.AddDays(i),
+                    ExpectedBookings = (int)Math.Round(avgDailyBookings)
+                });
+            }
+
+            return forecast;
+        }
     }
 }
 

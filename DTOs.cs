@@ -126,4 +126,9 @@ namespace Flight_Management_Company
         public decimal DailyRevenue { get; set; }
         public decimal CumulativeRevenue { get; set; }
     }
+    public class BookingForecastDto
+    {
+        public DateTime Date { get; set; }
+        public int ExpectedBookings { get; set; }
+    }
 }

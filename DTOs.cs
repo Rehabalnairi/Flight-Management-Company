@@ -109,5 +109,14 @@ namespace Flight_Management_Company
         public bool NeedsMaintenance { get; set; }
     }
 
+    public class BaggageDto
+    {
+        public int TicketId { get; set; }
 
-}
+        public string PassengerName { get; set; }
+        public decimal WeightKg { get; set; }
+
+        public double TotalBaggageWeight { get; set; }
+        public bool IsOverweight { get; set; }
+    }
+    }

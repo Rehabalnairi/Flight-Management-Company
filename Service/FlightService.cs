@@ -373,6 +373,30 @@ namespace Flight_Management_Company.Service
 
             return result;
         }
+    
+    // Baggage Overweight Alerts    
+
+        public List<BaggageDto> GetBaggageOverweightAlerts(double threshold = 30.0)
+        {
+            var result = _flightContext.Baggages
+                .Include(b => b.Ticket)
+                    .ThenInclude(t => t.TicketId)
+                .AsEnumerable()
+                .GroupBy(b => b.Ticket)
+                .Select(g => new BaggageDto
+                {
+                    TicketId = g.Key.TicketId,
+                    PassengerName = g.Key.Booking.Passenger.FullName,
+                    TotalBaggageWeight = g.Sum(x => x.Weight),
+                    IsOverweight = g.Sum(x => x.Weight) > threshold
+                })
+                .Where(x => x.IsOverweight) 
+
+                .ToList();
+
+            return result;
+        }
     }
+
 }
 

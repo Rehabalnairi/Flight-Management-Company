@@ -18,6 +18,7 @@ namespace Flight_Management_Company.Models
 
         [Column(TypeName = "decimal(6,2)")]
         public decimal WeightKg { get; set; }
+        public double Weight { get; set; }
 
         public string TagNumber { get; set; }
 

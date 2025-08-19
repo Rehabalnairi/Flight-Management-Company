@@ -24,6 +24,6 @@ namespace Flight_Management_Company.Models
         public Airpot DestinationAirport { get; set; }
 
         public ICollection<Flight> Flights { get; set; }
-
+        public double Distance { get; set; }
     }
 }

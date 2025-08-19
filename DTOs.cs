@@ -55,6 +55,7 @@ namespace Flight_Management_Company
         public string Destination { get; set; }
         public DateTime DepUtc { get; set; }
         public DateTime ArrUtc { get; set; }
+        public DateTime Arrival { get; set; }
     }
 
     public class PassengerItineraryDto
@@ -92,6 +93,14 @@ namespace Flight_Management_Company
         public DateTime ArrivalUtc { get; set; }
         public string Route { get; set; }
     }
+    public class FrequentFlierDto
+    {
+        public int PassengerId { get; set; }
+        public string PassengerName { get; set; }
+        public int FlightCount { get; set; }
+        public double TotalDistance { get; set; }
+    }
 
-  
+
+
 }

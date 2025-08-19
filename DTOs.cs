@@ -119,4 +119,11 @@ namespace Flight_Management_Company
         public double TotalBaggageWeight { get; set; }
         public bool IsOverweight { get; set; }
     }
+
+    public class RevenueDto
+    {
+        public DateTime Date { get; set; }
+        public decimal DailyRevenue { get; set; }
+        public decimal CumulativeRevenue { get; set; }
     }
+}

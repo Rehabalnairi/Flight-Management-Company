@@ -98,8 +98,13 @@ namespace Flight_Management_Company.Service
                 .OrderByDescending(r => r.TotalRevenue)
                 .ToList();
         }
+        //. Complex Set/Partitioning Examples
 
-
-
+        public List<Passenger> GetUnionPassengers()
+        {
+            var vipPassengers = _flightContext.Passengers.Where(p => p.IsVIP).ToList();
+            var frequentFliers = _flightContext.Passengers.Where(p => p.TotalFlights > 10).ToList();
+            return vipPassengers.Union(frequentFliers).ToList();
+        }
     }
 }

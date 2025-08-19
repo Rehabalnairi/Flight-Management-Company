@@ -21,6 +21,7 @@ namespace Flight_Management_Company.Models
 
         public int FlightId { get; set; }
         public Flight Flight { get; set; }
+     
 
         public ICollection<Baggage> Baggages { get; set; }
     }

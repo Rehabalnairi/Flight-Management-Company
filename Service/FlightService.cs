@@ -63,7 +63,7 @@ namespace Flight_Management_Company.Service
         public List<FlightManifestDto> GetDailyFlightManifest(DateTime dateUtc)
         {
             var flights = _flightContext.Flights
-                .Include(f =>f.Route)
+                .Include(f => f.Route)
                 .ThenInclude(r => r.OriginAirport)
             .Include(f => f.Route)
                 .ThenInclude(r => r.DestinationAirport)
@@ -172,7 +172,7 @@ namespace Flight_Management_Company.Service
 
         public List<int> GetAvailableSeats(int flightId)
         {
-        
+
             var flight = _flightContext.Flights
                 .Include(f => f.Aircraft)
                 .Include(f => f.Tickets)
@@ -183,10 +183,10 @@ namespace Flight_Management_Company.Service
 
             int capacity = flight.Aircraft.Capacity;
 
-           
+
             var allSeats = Enumerable.Range(1, capacity);
 
-          
+
             var bookedSeats = flight.Tickets
                 .Where(t => !string.IsNullOrEmpty(t.SeatNumber))
                 .Select(t => int.Parse(t.SeatNumber));
@@ -200,13 +200,13 @@ namespace Flight_Management_Company.Service
         {
             var conflicts = new List<CrewConflictDto>();
 
-         
+
             var flights = _flightContext.Flights
                 .Include(f => f.FlightCrews)
-                    .ThenInclude(fc => fc.CrewMember)  
+                    .ThenInclude(fc => fc.CrewMember)
                 .ToList();
 
-         
+
             var crewFlights = flights
                 .SelectMany(f => f.FlightCrews.Select(fc => new
                 {
@@ -227,7 +227,7 @@ namespace Flight_Management_Company.Service
                         var f1 = crewFlightsList[i];
                         var f2 = crewFlightsList[j];
 
-                       
+
                         if (f1.DepartureUtc < f2.ArrivalUtc && f2.DepartureUtc < f1.ArrivalUtc)
                         {
                             conflicts.Add(new CrewConflictDto
@@ -332,13 +332,13 @@ namespace Flight_Management_Company.Service
                 .Include(b => b.Tickets)
                     .ThenInclude(t => t.Flight)
                         .ThenInclude(f => f.Route)
-                .AsEnumerable() 
-                .GroupBy(b => b.Passenger) 
+                .AsEnumerable()
+                .GroupBy(b => b.Passenger)
                 .Select(g => new FrequentFlierDto
                 {
                     PassengerId = g.Key.PassengerId,
                     PassengerName = g.Key.FullName,
-                    FlightCount = g.SelectMany(b => b.Tickets).Count(), 
+                    FlightCount = g.SelectMany(b => b.Tickets).Count(),
                     TotalDistance = g.SelectMany(b => b.Tickets)
                                      .Sum(t => t.Flight.Route.Distance)//add distance property in Route model
                 })
@@ -349,10 +349,10 @@ namespace Flight_Management_Company.Service
         }
         //Maintenance Alerts
         public List<MaintenanceDto> GetMaintenanceAlerts(
-     double flightHourThreshold = 5000, 
-     int maintenanceDaysThreshold = 180) 
+     double flightHourThreshold = 5000,
+     int maintenanceDaysThreshold = 180)
         {
-            double avgSpeed = 800.0; 
+            double avgSpeed = 800.0;
 
             var result = _flightContext.Aircrafts
                 .Include(a => a.Flights)
@@ -373,8 +373,8 @@ namespace Flight_Management_Company.Service
 
             return result;
         }
-    
-    // Baggage Overweight Alerts    
+
+        // Baggage Overweight Alerts    
 
         public List<BaggageDto> GetBaggageOverweightAlerts(double threshold = 30.0)
         {
@@ -390,13 +390,87 @@ namespace Flight_Management_Company.Service
                     TotalBaggageWeight = g.Sum(x => x.Weight),
                     IsOverweight = g.Sum(x => x.Weight) > threshold
                 })
-                .Where(x => x.IsOverweight) 
+                .Where(x => x.IsOverweight)
 
                 .ToList();
 
             return result;
         }
-    }
+        // Conversion Operators Demonstration 
+        public class ConversionDemo
+        {
+            public static void RunDemo(List<Flight> flights, List<Route> routes)
+            {
+                Console.WriteLine("=== Conversion Operators Demo ===");
 
+               
+                var flightDict = flights.ToDictionary(f => f.FlightNumber, f => f);
+                Console.WriteLine("\nFlights as Dictionary:");
+                foreach (var kvp in flightDict)
+                {
+                    Console.WriteLine($"Key: {kvp.Key}, Value: {kvp.Value.DepartureUtc} → {kvp.Value.DepartureUtc}");
+                }
+
+                var topRoutes = routes.Take(10).ToArray();
+                Console.WriteLine("\nTop 10 Routes:");
+                foreach (var r in topRoutes)
+                {
+                    Console.WriteLine($"Route: {r.OriginAirportId} → {r.DestinationAirportId}, Distance: {r.Distance}");
+                }
+
+             
+                var inMemoryCalc = flights.AsEnumerable()
+                                          .Where(f => f.DepartureUtc < DateTime.Now)
+                                          .OrderBy(f => f.ScheduledDepartureUtc);
+                Console.WriteLine("\nFlights filtered In-Memory:");
+                foreach (var f in inMemoryCalc)
+                {
+                    Console.WriteLine($"Flight {f.FlightNumber}, Departure: {f.ScheduledDepartureUtc}");
+                }
+
+             
+                var mixed = new List<object> { "Hello", 123, flights.FirstOrDefault(), 45.6, routes.FirstOrDefault() };
+
+                var onlyFlights = mixed.OfType<Flight>();
+                Console.WriteLine("\nFlights extracted from mixed collection:");
+                foreach (var f in onlyFlights)
+                {
+                    Console.WriteLine($"Flight {f.FlightNumber}");
+                }
+            }
+        }
+        //. Window-like Operation (running totals)
+
+        public static List<RevenueDto> GetDailyCumulativeRevenue(List<Ticket> tickets)
+        {
+            
+            var dailyRevenue = tickets
+                .Where(t => t.Booking != null) 
+                .GroupBy(t => t.Booking.BookingDate.Date) 
+                .Select(g => new
+                {
+                    Date = g.Key,
+                    DailyRevenue = g.Sum(t => t.Fare)
+                })
+                .OrderBy(x => x.Date)
+                .ToList();
+
+            decimal cumulative = 0;
+            var result = dailyRevenue.Select(d =>
+            {
+                cumulative += d.DailyRevenue;
+                return new RevenueDto
+                {
+                    Date = d.Date,
+                    DailyRevenue = d.DailyRevenue,
+                    CumulativeRevenue = cumulative
+                };
+            }).ToList();
+
+            return result;
+        }
+    }
 }
+
+
 

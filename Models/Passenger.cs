@@ -16,6 +16,8 @@ namespace Flight_Management_Company.Models
         [Required]
         public string PassportNo { get; set; }
         public string Nationality { get; set; }
+        public bool IsVIP { get; set; }
+        public int TotalFlights { get; set; }
         public DateTime DOB { get; set; }
     }
 

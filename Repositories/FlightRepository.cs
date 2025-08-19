@@ -55,5 +55,14 @@ namespace Flight_Management_Company.Repositories
                 _flightContext.SaveChanges();
             }
         }
+        //x Set/Partitioning Examples
+        public List<Flight> GetFlightsPaged(int pageNumber, int pageSize)
+        {
+            return _flightContext.Flights
+                .OrderBy(f => f.FlightId)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+        }
     }
 }

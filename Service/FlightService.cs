@@ -347,8 +347,32 @@ namespace Flight_Management_Company.Service
 
             return result;
         }
-        //
+        //Maintenance Alerts
+        public List<MaintenanceDto> GetMaintenanceAlerts(
+     double flightHourThreshold = 5000, 
+     int maintenanceDaysThreshold = 180) 
+        {
+            double avgSpeed = 800.0; 
 
+            var result = _flightContext.Aircrafts
+                .Include(a => a.Flights)
+                    .ThenInclude(f => f.Route)
+                .AsEnumerable()
+                .Select(a => new MaintenanceDto
+                {
+                    AircraftId = a.AircraftId,
+                    AircraftModel = a.Model,
+                    LastMaintenanceDate = a.LastMaintenanceDate,
+                    TotalFlightHours = a.Flights.Sum(f => f.Route.Distance / avgSpeed),
+                    NeedsMaintenance =
+                        a.Flights.Sum(f => f.Route.Distance / avgSpeed) > flightHourThreshold ||
+                        (DateTime.Now - a.LastMaintenanceDate).TotalDays > maintenanceDaysThreshold
+                })
+                .Where(x => x.NeedsMaintenance)
+                .ToList();
+
+            return result;
+        }
     }
 }
 

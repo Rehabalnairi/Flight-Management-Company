@@ -100,7 +100,14 @@ namespace Flight_Management_Company
         public int FlightCount { get; set; }
         public double TotalDistance { get; set; }
     }
-
+   public class MaintenanceDto
+    {
+        public int AircraftId { get; set; }
+        public string AircraftModel { get; set; }
+        public double TotalFlightHours { get; set; }
+        public DateTime LastMaintenanceDate { get; set; }
+        public bool NeedsMaintenance { get; set; }
+    }
 
 
 }
